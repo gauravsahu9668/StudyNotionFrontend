@@ -12,3 +12,19 @@ export const apiconnector = (method,url,bodyData,headers,params)=>{
         params: params ? params :null,
         })
 }
+export function formatDate(isoString) {
+  const date = new Date(isoString);
+
+  // Options for formatting
+  const options = {
+    year: 'numeric',
+    month: 'long',   // "July"
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true     // 12-hour format with AM/PM
+  };
+
+  // Format using Intl.DateTimeFormat
+  return new Intl.DateTimeFormat('en-US', options).format(date);
+}

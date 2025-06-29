@@ -47,59 +47,64 @@ const RenderCartCourses = () => {
   });
 
   return (
-    <div className="w-full pb-5">
-      {totalItems > 0 ? (
-        <div className="w-full grid grid-cols-3 pb-3 gap-3">
-          {cart.map((course, index) => (
-            <div
-              key={course?._id || index}
-              className="p-3 border-[0.2px] border-richblack-500 rounded-lg hover:bg-richblack-800 hover:scale-90 transition-all duration-200 group"
-            >
-              {/* Course Thumbnail */}
-              <img
-                src={course?.thumbnail || "placeholder-image-url"}
-                className="w-fit h-[250px] rounded-lg"
-                alt={course?.courseName || "Course Thumbnail"}
-              />
-              {/* Course Name */}
-              <div className="text-[20px] text-richblack-25 font-semibold mt-3">
+    <div className="w-full pb-6">
+  {totalItems > 0 ? (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {cart.map((course, index) => (
+        <div
+          key={course?._id || index}
+          className="flex flex-col bg-richblack-800 border border-richblack-700 rounded-xl shadow-sm hover:shadow-lg hover:scale-[0.98] transition-all duration-300"
+        >
+          {/* Thumbnail */}
+          <img
+            src={course?.thumbnail || "placeholder-image-url"}
+            alt={course?.courseName || "Course Thumbnail"}
+            className="w-full h-[180px] md:h-[220px] object-cover rounded-t-xl"
+          />
+
+          {/* Details */}
+          <div className="flex flex-col p-4 flex-1 justify-between">
+            <div>
+              <h2 className="text-richblack-5 text-lg md:text-xl font-semibold mb-1 truncate">
                 {course?.courseName || "Unnamed Course"}
-              </div>
-              {/* Instructor Name */}
-              <div className="text-richblack-500 italic mt-3">
-                By -{" "}
+              </h2>
+              <p className="text-richblack-400 text-sm italic mb-2">
+                By{" "}
                 <span className="underline">
                   {course?.instructor?.firstName || "N/A"}{" "}
                   {course?.instructor?.lastName || ""}
                 </span>
-              </div>
-              {/* Course Price */}
-              <div className="text-[23px] text-richblack-50 font-bold mt-3">
+              </p>
+              <p className="text-yellow-50 text-lg font-bold">
                 Rs {course?.price || "0"}
-              </div>
-              {/* Action Buttons */}
-              <div className="flex flex-row justify-between mt-2">
-                <Link to={`/course-buy/${course?._id}`}>
-                  <button className="px-3 py-2 border-[1px] border-yellow-50 text-yellow-50 rounded-full">
-                    Buy Now
-                  </button>
-                </Link>
-                <button
-                  onClick={() => removeHandler(course?._id)}
-                  className="px-3 py-2 text-richblack-25 rounded-full bg-richblack-800 transition-all duration-200 group-hover:bg-richblack-900"
-                >
-                  Remove
-                </button>
-              </div>
+              </p>
             </div>
-          ))}
+
+            {/* Buttons */}
+            <div className="flex gap-2 mt-3">
+              <Link to={`/course-buy/${course?._id}`} className="flex-1">
+                <button className="w-full py-2 text-center text-sm font-semibold rounded-lg border border-yellow-50 text-yellow-50 hover:bg-yellow-50 hover:text-richblack-900 transition">
+                  Buy Now
+                </button>
+              </Link>
+              <button
+                onClick={() => removeHandler(course?._id)}
+                className="flex-1 py-2 text-center text-sm font-semibold rounded-lg bg-richblack-700 text-richblack-100 hover:bg-richblack-900 transition"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
         </div>
-      ) : (
-        <div className="flex text-center text-[25px] text-richblack-100 w-fit mx-auto">
-          Your cart is empty
-        </div>
-      )}
+      ))}
     </div>
+  ) : (
+    <div className="flex justify-center text-center text-lg md:text-xl text-richblack-300 py-10">
+      Your cart is empty
+    </div>
+  )}
+</div>
+
   );
 };
 

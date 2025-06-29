@@ -1,127 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import StudentChat from "./StudentChat";
-import { useRef } from "react";
 import toast from "react-hot-toast";
+
 const StudentLive = () => {
-  const [chat, setChat] = useState(false);  // To check WebSocket connection status
-  const remoteVideoRef = useRef(null); // Create a ref for the video element
-  const [title,settitle]=useState("");
-  const [desc,setdesc]=useState("");
+  const [chat, setChat] = useState(false);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const remoteVideoRef = useRef(null);
+
   useEffect(() => {
-      const socket = new WebSocket("ws://localhost:8000");
-      socket.onopen = () => {
-          socket.send(JSON.stringify({ type: "receiver" }));
-      };
+    const socket = new WebSocket("ws://localhost:8000");
+    socket.onopen = () => socket.send(JSON.stringify({ type: "receiver" }));
 
-      let pc = null;
+    let pc = null;
+    socket.onmessage = async event => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "createOffer") {
+        pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+        pc.onicecandidate = e => e.candidate && socket.send(JSON.stringify({ type: "iceCandidate", candidate: e.candidate }));
+        pc.ontrack = e => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = new MediaStream([e.track]); };
+        await pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        socket.send(JSON.stringify({ type: "createAnswer", sdp: pc.localDescription }));
+      } else if (msg.type === "iceCandidate" && pc) {
+        await pc.addIceCandidate(new RTCIceCandidate(msg.candidate));
+      } else if (msg.type === "title") {
+        toast.success(msg.data);
+        setTitle(msg.data);
+      } else if (msg.type === "description") {
+        toast.success(msg.data);
+        setDesc(msg.data);
+      }
+    };
 
-      socket.onmessage = async (event) => {
-          const message = JSON.parse(event.data);
-          if (message.type === "createOffer") {
-              // Create a new RTCPeerConnection
-              pc = new RTCPeerConnection({
-                  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-              });
-
-              // Handle ICE candidates
-              pc.onicecandidate = (event) => {
-                  if (event.candidate) {
-                      socket?.send(
-                          JSON.stringify({ type: "iceCandidate", candidate: event.candidate })
-                      );
-                  }
-              };
-
-              // Handle remote media streams
-              pc.ontrack = (event) => {
-                  const remoteStream = new MediaStream();
-                  remoteStream.addTrack(event.track);
-                  console.log("Received track:", event.track);
-
-                  // Set the remote stream to the video element
-                  if (remoteVideoRef.current) {
-                      remoteVideoRef.current.srcObject = remoteStream;
-                  }
-              };
-
-              try {
-                  // Set the remote description from the incoming SDP offer
-                  await pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
-
-                  // Create and send the answer SDP
-                  const answer = await pc.createAnswer();
-                  await pc.setLocalDescription(answer);
-
-                  socket.send(
-                      JSON.stringify({
-                          type: "createAnswer",
-                          sdp: pc.localDescription,
-                      })
-                  );
-              } catch (error) {
-                  console.error("Error handling createOffer message:", error);
-              }
-          } else if (message.type === "iceCandidate") {
-              if (pc) {
-                  try {
-                      // Add received ICE candidate
-                      await pc.addIceCandidate(new RTCIceCandidate(message.candidate));
-                  } catch (error) {
-                      console.error("Error adding ICE candidate:", error);
-                  }
-              } else {
-                  console.warn("No peer connection available for ICE candidate");
-              }
-          }else if(message.type==='title'){
-            toast.success(message.data)
-              settitle(message.data)
-          }else if(message.type==='description'){
-            setdesc(message.data)
-            toast.success(message.data)
-          }
-      };
-
-      return () => {
-          if (pc) {
-              pc.close();
-          }
-          socket.close();
-      };
+    return () => { pc?.close(); socket.close(); };
   }, []);
+
   return (
-    <div className="flex flex-col  min-h-screen mt-16 p-4 bg-richblack-900">
-      <div className="w-full flex ">
-      <div className="relative w-[70%] h-[720px] mr-6 ">
-      <div className="absolute bottom-5 left-0 w-full h-1 bg-[red] animate-pulse"></div>
-      <div className="w-fit px-2 py-1 bg-[red] animate-ping absolute bottom-5 right-0">Live</div>
-    <video 
-    className="w-full h-full object-cover rounded-lg" 
-    ref={remoteVideoRef} 
-    muted={true} 
-    autoPlay 
-    playsInline 
-    />
-    </div>
-      <div className="w-[30%] h-[720px] mr-10 flex flex-col items-start">
-        <div
-          onClick={() => setChat(!chat)}
-          className="cursor-pointer w-fit h-fit text-white bg-[#5fd8df] px-4  py-2 rounded-md"
-        >
-          {chat ? "Close live chat" : "Open live chat"}
+    <div className="flex flex-col bg-richblack-900 min-h-screen px-4 sm:px-6 md:px-8 mt-16">
+      <div className="flex flex-col lg:flex-row gap-4 mb-8">
+        {/* Video */}
+        <div className="relative w-full lg:w-[70%] h-[250px] sm:h-[400px] lg:h-[500px] rounded-lg overflow-hidden">
+          <video ref={remoteVideoRef} className="w-full h-full object-cover rounded-lg" autoPlay muted playsInline></video>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-red-500 animate-pulse"></div>
+          <div className="absolute bottom-2 right-2 bg-red-600 text-xs px-2 py-1 rounded animate-ping">LIVE</div>
         </div>
-        {chat && <StudentChat />}
+        {/* Chat */}
+        <div className="flex flex-col w-full lg:w-[30%] gap-3">
+          <button onClick={() => setChat(!chat)} className="bg-blue-500 text-black px-3 py-2 rounded text-sm font-semibold">
+            {chat ? "Hide Chat" : "Show Chat"}
+          </button>
+          {chat && <StudentChat />}
+        </div>
       </div>
+      <div className="max-w-3xl">
+        <p className="text-xl font-semibold text-white">{title}</p>
+        <p className="text-richblack-400">{desc}</p>
       </div>
-      <div className='mt-4 text-[#d0d8d3] font-semibold text-[25px] w-[70%] text-left'>
-                    {title}
-                </div>
-                <div className='mt-4 text-[#a6a5a5] text-[18px] w-[70%] text-left'>
-                    {desc}
-                </div>
     </div>
   );
 };
 
 export default StudentLive;
-
-

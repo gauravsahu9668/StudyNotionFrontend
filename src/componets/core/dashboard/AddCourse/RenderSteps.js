@@ -21,45 +21,60 @@ const RenderSteps = () => {
         }
   ]
   return (
-    <div className='flex flex-col w-full gap-4'>
-         <div className='flex  items-center pl-24 mt-2 '>
-         {
-            steps.map((item)=>{
-              return (
-                <div className='flex items-center'>
-                  <div className={`${step ===item.id ?("bg-yellow-900 border-[2px] border-yellow-50 text-yellow-50"):
-                  ("border-richblack-700 bg-richblack-800 text-richblack-300")} w-[50px] h-[50px] flex items-center justify-center rounded-full text-[18px]`}>
-                  {
-                    step>item.id ?(<FaCheckCircle color='yellow'></FaCheckCircle>):(<span>{item.id}</span>)
-                  }
-                  </div>
-                  <span>{item.id===3 ?(<></>):(<div  className={`${step>item.id ?("text-yellow-50"):("text-richblack-600")} w-[160px] border-[1px] border-dashed`}></div>)}</span>
-                </div>
-              )
-            })
-          }
-         </div>
-         <div className='flex gap-[100px] items-center text-richblack-50 text-[16px] pl-16  font-bold mt-2'>
-          {
-            steps.map((item)=>{
-              return(
-                <div>
-                  <p>{item.title}</p>
-                </div>
-              )
-            })
-          }
-         </div>
-         <div className='mt-3'>
-            {step===1 && (<CourseInformation></CourseInformation>)}
-            {
-              step===2 && (<CourseBuilder></CourseBuilder>)
+   <div className="flex flex-col w-full gap-6">
+  {/* Step circles with connecting lines */}
+  <div className="flex flex-wrap justify-center lg:justify-start items-center gap-2 md:gap-4 mt-2">
+    {steps.map((item, index) => (
+      <div key={item.id} className="flex items-center">
+        {/* Step circle */}
+        <div
+          className={`
+            w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full text-sm md:text-base font-semibold
+            ${
+              step === item.id
+                ? "bg-yellow-900 border-2 border-yellow-50 text-yellow-50"
+                : "border border-richblack-700 bg-richblack-800 text-richblack-300"
             }
-            {
-              step===3 && (<CoursePublish></CoursePublish>)
-            }
-         </div>
-    </div>
+          `}
+        >
+          {step > item.id ? (
+            <FaCheckCircle className="text-yellow-400" size="1rem" />
+          ) : (
+            <span>{item.id}</span>
+          )}
+        </div>
+
+        {/* Connecting line (hide on last item) */}
+        {index !== steps.length - 1 && (
+          <div
+            className={`
+              hidden md:block
+              w-24 md:w-40 border-b border-dashed
+              ${step > item.id ? "border-yellow-50" : "border-richblack-600"}
+            `}
+          ></div>
+        )}
+      </div>
+    ))}
+  </div>
+
+  {/* Step titles */}
+  <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 md:gap-[4.5rem] text-richblack-50 text-sm md:text-[16px] font-bold">
+    {steps.map((item) => (
+      <div key={item.id} className="text-center max-w-[80px] md:max-w-none">
+        <p>{item.title}</p>
+      </div>
+    ))}
+  </div>
+
+  {/* Step content */}
+  <div className="mt-3">
+    {step === 1 && <CourseInformation />}
+    {step === 2 && <CourseBuilder />}
+    {step === 3 && <CoursePublish />}
+  </div>
+</div>
+
   )
 }
 

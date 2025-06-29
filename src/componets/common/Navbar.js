@@ -18,6 +18,8 @@ const Navbar = () => {
 
 
   const [sublink,setlink]=useState([]);
+   const [dropdown, setDropdown] = useState(false);
+    const handleLinkClick = () => setDropdown(false);
   const fetchsublinks = async()=>{
       try{
        const  result=await apiconnector("GET",categories.CATEGORIES_API)
@@ -83,7 +85,7 @@ const Navbar = () => {
                                 </div>
                               </div>
                             ):(
-                                <Link to={link?.path}>
+                                <Link to={link?.path} className={token? "hidden":"hidden md:block"}>
                                    <p className={matchroute(link?.path)? ("text-yellow-25"):("text-richblack-25")} >{link.title}</p>
                                 </Link>
                             )
@@ -112,7 +114,7 @@ const Navbar = () => {
              }
              {
               token===null && (
-                <Link to="login">
+                <Link to="login" className='hidden md:block'>
                   <button className='border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100 rounded-md'>
                     Login in
                   </button>
@@ -121,7 +123,7 @@ const Navbar = () => {
              }
              {
               token===null && (
-                <Link to="/signup">
+                <Link to="/signup" className='hidden md:block'>
                 <button className='border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100 rounded-md'>
                   Sign Up
                 </button>
@@ -133,6 +135,59 @@ const Navbar = () => {
                 <ProfileDropdown></ProfileDropdown>
               )
              }
+              <div className="relative group">
+  {token === null && (
+    <div className="block md:hidden">
+      <button
+        className="flex items-center gap-2 border border-gray-300 bg-gradient-to-r from-white to-gray-100 px-4 py-2 text-gray-800 rounded-md hover:from-gray-100 hover:to-gray-200 transition-colors shadow-sm"
+      >
+        Menu
+        <svg
+          className="w-4 h-4 fill-current text-gray-600"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path d="M5.516 7.548l4.484 4.482 4.484-4.482L16 8.532 10 14.532 4 8.532z" />
+        </svg>
+      </button>
+
+      <div className="absolute right-0 mt-2 w-44 bg-[#afadad] rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+        <Link
+          to="/"
+          className="block px-4 py-2 hover:bg-yellow-100 hover:text-gray-900 transition rounded-t-xl"
+        >
+          Home
+        </Link>
+        <Link
+          to="/about"
+          className="block px-4 py-2 hover:bg-yellow-100 hover:text-gray-900 transition"
+        >
+          About
+        </Link>
+        <Link
+          to="/contact"
+          className="block px-4 py-2 hover:bg-yellow-100 hover:text-gray-900 transition"
+        >
+          Contact
+        </Link>
+        <div className="border-t border-gray-200 my-1"></div>
+        <Link
+          to="/login"
+          className="block px-4 py-2 hover:bg-yellow-100 hover:text-gray-900 transition"
+        >
+          Login
+        </Link>
+        <Link
+          to="/signup"
+          className="block px-4 py-2 hover:bg-yellow-100 hover:text-gray-900 transition rounded-b-xl"
+        >
+          Sign Up
+        </Link>
+      </div>
+    </div>
+  )}
+</div>
+
          </div>
       </div>
     </div>

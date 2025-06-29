@@ -1,153 +1,201 @@
-import React, { useEffect, useState } from 'react'
-import {  useLocation, Link } from 'react-router-dom'
-import { getcoursedetails } from '../../../services/operation/courses'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { getcoursedetails, rateandreview} from '../../../services/operation/courses';
+import { useSelector } from 'react-redux';
 import { IoMdArrowBack } from "react-icons/io";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { IoIosVideocam } from "react-icons/io";
-import ReactStars from "react-rating-stars-component"
+import ReactStars from "react-rating-stars-component";
 import { MdOutlineStarPurple500, MdOutlineStarOutline } from "react-icons/md";
-import { rateandreview } from '../../../services/operation/courses';
 import toast from 'react-hot-toast';
 
 const CourseView = () => {
-  const location = useLocation()
-  const { token } = useSelector((state) => state.auth)
-  const courseId = location.pathname.split("/").at(-1)
-  const [courses, setcourses] = useState([])
-  const [videourl, setvideourl] = useState(null)
-  const [desc, setdesc] = useState(null)
-  const [downbutton, setdownbutton] = useState(null)
-  const [reviewmess, setviewmess] = useState(false)
+  const location = useLocation();
+  const { token } = useSelector(state => state.auth);
+  const { user } = useSelector(state => state.profile);
+  const courseId = location.pathname.split("/").at(-1);
+
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [activeSectionId, setActiveSectionId] = useState(null);
+  const [currentVideo, setCurrentVideo] = useState({ url: null, desc: null, id: null });
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const [rating, setRating] = useState(0);
-  const [review,setreview]=useState("")
-  const {user}=useSelector((state)=>state.profile)
-  const ratingChanged = (newRating) => {
-    setRating(newRating);
+  const [review, setReview] = useState("");
+
+  const fetchCourseDetails = async () => {
+    try {
+      setLoading(true);
+      const res = await getcoursedetails(courseId, token);
+      setCourse(res?.data?.data);
+      console.log(res.data.data)
+    } catch (err) {
+      toast.error("Failed to load course");
+    } finally {
+      setLoading(false);
+    }
   };
-  const reviewHandler = (event) => {
-    event.preventDefault();
-      rateandreview(token,rating,review,courseId).then((response)=>{
-        if(response.data.success){
-            setviewmess(false)
-        }
-        else{
-          toast.error(response.data.message)
-        }
-      })
-  };
-  const changeHandler=(e)=>{
-    setreview(e.target.value)
-  }
-  const getcoursefulldetails = () => {
-    getcoursedetails(courseId, token).then((response) => {
-      console.log(response.data.data)
-      setcourses(response.data.data)
-    })
-  }
+
   useEffect(() => {
-    getcoursefulldetails()
-  })
+    fetchCourseDetails();
+  }, []);
+
+  const handleVideoSelect = (video) => {
+    setCurrentVideo({ url: video.videoUrl, desc: video.description, id: video._id });
+  };
+
+  const handleVideoEnd = async () => {
+    // try {
+    //   await updateCourseProgress(courseId, currentVideo.id, token);
+    //   toast.success("Progress saved!");
+    // } catch {
+    //   toast.error("Failed to update progress");
+    // }
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await rateandreview(token, rating, review, courseId);
+      if (res?.data?.success) {
+        toast.success("Review submitted!");
+        setShowReviewModal(false);
+      } else {
+        toast.error(res?.data?.message || "Failed to submit review");
+      }
+    } catch {
+      toast.error("Error submitting review");
+    }
+  };
 
   return (
-    <div>
-      {courses.map((course, index) => {
-        return (
+    <div className="flex flex-col md:flex-row w-full mt-[56px] bg-richblack-900 text-richblack-25">
+      {/* Sidebar */}
+      <aside className="md:w-[300px] w-full md:h-[calc(100vh-56px)] border-r border-richblack-700 overflow-y-auto">
+        <div className="flex items-center justify-between p-4 bg-richblack-800 sticky top-0">
+          <Link to="/dashboard/enrolled-courses">
+            <IoMdArrowBack size="1.5rem" className="text-richblack-100" />
+          </Link>
+          <button 
+            onClick={() => setShowReviewModal(true)} 
+            className="px-3 py-1 bg-yellow-50 text-richblack-900 rounded hover:bg-yellow-100 transition"
+          >
+            Review
+          </button>
+        </div>
+
+        {loading ? (
+          <div className="p-4">Loading course...</div>
+        ) : (
           <>
-            {course._id === courseId && (
-              <div key={index} className='relative w-full'>
-                <div className='w-[280px] h-[calc(100vh-(56px))] bg-richblack-800 mt-[56px] '>
-                  <div className='w-full p-2  mt-1 flex flex-row justify-between'>
-                    <Link to="/dashboard/enrolled-courses">
-                      <button className='w-[30px] h-[30px] rounded-full flex items-center justify-center bg-richblack-400'>
-                        <IoMdArrowBack size={"1.5rem"} />
-                      </button>
-                    </Link>
-                    <button onClick={() => { setviewmess(!reviewmess) }} className='px-2 py-1 text-[16px] bg-yellow-50 rounded-lg font-semibold'>Review</button>
-                  </div>
-                  <div className='mt-2'>
-                    {course?.coursecontent.map((section, index) => {
-                      return (
-                        <div key={index}>
-                          <div className='flex items-center justify-between p-2 bg-richblack-700 text-white border-b-[1px] border-richblack-900'>
-                            <div className='w-fit'>{section?.sectionName}</div>
-                            {downbutton !== section._id ? (
-                              <FaAngleDown onClick={() => { setdownbutton(section._id) }} className='cursor-pointer' />
-                            ) : (
-                              <FaAngleUp onClick={() => { setdownbutton(null) }} className='cursor-pointer' />
-                            )}
-                          </div>
-                          <div className='w-full flex flex-col '>
-                            {downbutton === section._id && (
-                              section?.subsection.map((small, index) => {
-                                return (
-                                  downbutton !== null && (
-                                    <div key={index} onClick={() => { setvideourl(small?.videoUrl); setdesc(small?.description) }} className='flex flex-row cursor-pointer gap-x-2 items-center relative bg-yellow-800 bg-opacity-50 border-b-[2px] border-richblack-400 text-yellow-200 pl-3'>
-                                      <span className='w-[2px] h-full bg-yellow-25 top-0 left-0 absolute'></span>
-                                      <IoIosVideocam />
-                                      <div className=' p-1  text-[16px]'>{small?.title}</div>
-                                    </div>
-                                  )
-                                )
-                              })
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
+            <h2 className="p-4 text-lg font-semibold">{course?.courseName}</h2>
+            {course
+  ?.filter(c => c._id === courseId)
+  ?.map((singleCourse) => (
+    <React.Fragment key={singleCourse._id}>
+      <h2 className="p-4 text-lg font-semibold">{singleCourse.courseName}</h2>
+      {singleCourse?.coursecontent?.map(section => (
+        <div key={section._id}>
+          <button
+            className="w-full flex justify-between items-center px-4 py-2 bg-richblack-800 hover:bg-richblack-700 transition"
+            onClick={() => setActiveSectionId(activeSectionId === section._id ? null : section._id)}
+          >
+            <span>{section.sectionName}</span>
+            {activeSectionId === section._id ? <FaAngleUp /> : <FaAngleDown />}
+          </button>
+          {activeSectionId === section._id && (
+            <div>
+              {section?.subsection?.map(video => (
+                <div 
+                  key={video._id}
+                  onClick={() => handleVideoSelect(video)}
+                  className={`flex items-center gap-2 px-6 py-2 cursor-pointer hover:bg-yellow-800/40 transition 
+                    ${currentVideo.id === video._id ? 'bg-yellow-800/40 text-yellow-200' : ''}`}
+                >
+                  <IoIosVideocam />
+                  <span>{video.title}</span>
                 </div>
-                <div className='absolute w-[80%] h-[500px] top-2 right-3'>
-                  {videourl === null ? (
-                    <>
-                      <div className='text-[25px] text-richblack-25 text-center mt-10'>You can watch the lecture here</div>
-                      <div className='text-[16px] text-yellow-25 text-center'>Start playing the lecture videos</div>
-                    </>
-                  ) : (
-                    <video src={videourl} controls className='w-full h-[110%] rounded-lg '></video>
-                  )}
-                  {desc !== null && (
-                    <p className='w-full text-[16px] text-richblack-25 p-2 bg-richblack-800 mt-4 rounded-lg'>{desc}</p>
-                  )}
-                </div>
-                {reviewmess && (
-                  <div className='w-full h-[calc(100vh-56px)] bg-richblack-800 bg-opacity-80 absolute top-0 left-0 flex items-center justify-center'>
-                    <div className='w-[450px] h-[320px] bg-richblack-900 rounded-lg p-2 '>
-                      <div className='flex flex-row items-center justify-center text-richblack-50 gap-2 mt-2 mb-2'>
-                        <div ><img alt='ima hai' src={user?.image}  className='w-[50px] h-[50px]  rounded-full'></img></div>
-                        <div>
-                          <h1 className='text-yellow-50 text-[17px]'>{user?.firstName}{" " + user?.lastName}</h1>
-                          <p className='text-[14px]'>Posting Publicly</p>
-                        </div>
-                      </div>
-                      <form onSubmit={reviewHandler}>
-                        <div className='flex flex-row items-center justify-center gap-2'>
-                          <ReactStars
-                            count={5}
-                            onChange={ratingChanged}
-                            size={40} // This sets the size of the container
-                            emptyIcon={<MdOutlineStarOutline style={{ fontSize: '30px', margin: '0 5px' }} />}
-                            fullIcon={<MdOutlineStarPurple500 style={{ fontSize: '30px', margin: '0 5px' }} />}
-                            activeColor="#ffd700"
-                          />
-                        </div>
-                        <textarea onChange={changeHandler} rows={5} placeholder='Add reviews' className='w-full rounded-lg p-2 text-white text-[13px] bg-richblack-800 border-b-[3px] border-richblack-500 outline-none'>
-                        </textarea>
-                        <div className='w-full flex justify-between mt-2'>
-                          <button type='button' onClick={() => { setviewmess(!reviewmess) }} className='text-white text-[16px] px-2 py-1 bg-richblack-500 rounded-lg '>Cancel</button>
-                          <button className='text-yellow-50 text-[16px] px-2 py-1 rounded-lg border-[1px] border-yellow-50' type='submit'>Save</button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                )}
-              </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </React.Fragment>
+  ))}
+          </>
+        )}
+      </aside>
+
+      {/* Video player & description */}
+      <main className="flex-1 p-4 flex flex-col items-center">
+        {currentVideo.url ? (
+          <>
+            <video 
+              src={currentVideo.url} 
+              controls 
+              onEnded={handleVideoEnd}
+              className="w-full max-w-4xl rounded-lg shadow-lg"
+            />
+            {currentVideo.desc && (
+              <p className="max-w-4xl mt-4 text-sm bg-richblack-800 p-3 rounded">{currentVideo.desc}</p>
             )}
           </>
-        )
-      })}
-    </div>
-  )
-}
+        ) : (
+          <div className="flex flex-col items-center justify-center mt-20 text-center">
+            <h3 className="text-xl font-semibold">Select a video to start learning</h3>
+            <p className="text-yellow-100">Click on lecture titles in the sidebar</p>
+          </div>
+        )}
+      </main>
 
-export default CourseView
+      {/* Review modal */}
+      {showReviewModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <div className="bg-richblack-800 w-11/12 max-w-md rounded-lg p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <img src={user?.image} alt="profile" className="w-12 h-12 rounded-full" />
+              <div>
+                <p className="text-yellow-50 font-semibold">{user?.firstName} {user?.lastName}</p>
+                <p className="text-xs">Posting publicly</p>
+              </div>
+            </div>
+            <form onSubmit={handleReviewSubmit} className="space-y-3">
+              <ReactStars
+                count={5}
+                onChange={setRating}
+                size={30}
+                emptyIcon={<MdOutlineStarOutline />}
+                fullIcon={<MdOutlineStarPurple500 />}
+                activeColor="#ffd700"
+              />
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                rows={4}
+                placeholder="Write your review..."
+                className="w-full p-2 rounded bg-richblack-900 text-sm text-white border border-richblack-700 focus:outline-none"
+              />
+              <div className="flex justify-end gap-2">
+                <button 
+                  type="button" 
+                  onClick={() => setShowReviewModal(false)}
+                  className="px-3 py-1 bg-richblack-700 rounded text-white hover:bg-richblack-600"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  className="px-3 py-1 border border-yellow-50 text-yellow-50 rounded hover:bg-yellow-50 hover:text-richblack-900 transition"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CourseView;

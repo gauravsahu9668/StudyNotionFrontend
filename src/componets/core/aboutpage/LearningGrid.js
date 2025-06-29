@@ -3,40 +3,39 @@ import learningarray from '../../../Data/learningarray'
 import CTAButton from '../homepage/Button'
 const LearningGrid = () => {
   return (
-    <div className='grid mx-auto grid-cols-1 lg:grid-cols-4 mb-10 text-white w-[80%] mt-20'>
-       {
-         learningarray.map((card,index)=>{
-              return (
-                <div className={`${index===0 && "lg:col-span-2 bg-richblack-900 "} ${card.order %2===1 ? "bg-richblack-700":"bg-richblack-800"}
-                ${card.order===3 && "lg:col-start-2"}`} key={index}>
-                  {
-                    card.order<0 ?(
-                      <div className='flex flex-col items-start justify-start gap-3'>
-                        <div className='w-[80%] text-start text-[30px] font-bold'>
-                          {card.heading}
-                          <br></br>
-                          <span className='text-blue-200'>{card.highlighttext}</span>
-                        </div>
-                        <div className='w-[90%] text-lg text-richblack-500'>{card.description}</div>
-                        <div>
-                          <CTAButton linkto={card.Btnlink} active={true}>
-                            {card.Btntext}
-                          </CTAButton>
-                        </div>
-                      </div>
-                    ):(
-                      <div className='flex flex-col p-5 gap-4 py-10 pb-28'>
-                        <h1 className='text-richblack-50 font-bold'>{card.heading}</h1>
-                        <p className='text-richblack-500 font-bold text-[16px]'>{card.description}</p>
-
-                      </div>
-                    )
-                  }
-                </div>
-              )
-         })
-       }
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-[90%] max-w-screen-xl mx-auto mt-12 mb-10 text-white">
+  {learningarray.map((card, index) => (
+    <div
+      key={index}
+      className={`
+        ${index === 0 ? "lg:col-span-2 bg-richblack-900" : ""}
+        ${card.order % 2 === 1 ? "bg-richblack-700" : "bg-richblack-800"}
+        ${card.order === 3 ? "lg:col-start-2" : ""}
+        rounded-lg p-5 flex flex-col justify-between hover:shadow-lg transition
+      `}
+    >
+      {card.order < 0 ? (
+        <div className="flex flex-col items-start gap-3">
+          <h2 className="text-2xl md:text-3xl font-bold">
+            {card.heading}
+            <br />
+            <span className="text-blue-400">{card.highlighttext}</span>
+          </h2>
+          <p className="text-richblack-300 text-base md:text-lg">{card.description}</p>
+          <CTAButton linkto={card.Btnlink} active={true}>
+            {card.Btntext}
+          </CTAButton>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3 py-6">
+          <h3 className="text-lg md:text-xl font-bold text-richblack-50">{card.heading}</h3>
+          <p className="text-richblack-300 text-sm md:text-base font-medium">{card.description}</p>
+        </div>
+      )}
     </div>
+  ))}
+</div>
+
   )
 }
 

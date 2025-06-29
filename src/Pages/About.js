@@ -10,90 +10,94 @@ import ContactFormSection from '../componets/core/aboutpage/ContactFormSection'
 import Footer from '../componets/common/Footer/Footer'
 const About = () => {
   return (
-    <div className='w-full'>
-      {/* section 1 */}
-      <div className='bg-richblack-800 h-[500px]'>
-      <div className='w-[80%] flex flex-col items-center gap-3 pt-5 mx-auto relative '>
-               <div className='text-center w-[62%] text-[32px] text-white font-bold mt-14'>
-               Driving Innovation in Online Education for a
-               </div>
-               <div className='text-center w-[62%] text-[32px] text-blue-100 font-bold'>Bright future</div>
-               <div className='w-[65%] text-center text-richblack-500 font-bold'>
-                  StudyNotion is at the forfront of driving innovation in online education, We're passinate
-                  about creating a brighter future by offring cutting-edge courses, leveraging
-                  emerging technologies, and nurturing a vibrant learning community
-               </div>
-               <div className='flex gap-5 mt-5'>
-                <img alt='imag hai' src={image1} className='rounded-md w-fit'></img>
-                <img alt='user' src={image2} className='rounded-md w-fit'></img>
-                <img alt='load' src={image3} className='rounded-md w-fit'></img>
-               </div>
+  <div className="w-full bg-richblack-900 text-richblack-25">
+  {/* Section 1 */}
+  <section className="bg-richblack-800 py-16">
+    <div className="max-w-screen-xl mx-auto flex flex-col items-center gap-4 px-4">
+      <h1 className="text-center text-3xl md:text-4xl font-extrabold text-richblack-5 mt-8">
+        Driving Innovation in Online Education for a
+      </h1>
+      <h2 className="text-center text-3xl md:text-4xl font-extrabold text-yellow-400">
+        Bright Future
+      </h2>
+      <p className="max-w-2xl text-center text-richblack-200 font-medium">
+        StudyNotion is at the forefront of driving innovation in online education. We’re passionate
+        about creating a brighter future by offering cutting-edge courses, leveraging emerging
+        technologies, and nurturing a vibrant learning community.
+      </p>
+      <div className="flex flex-wrap justify-center gap-4 mt-6">
+        <img alt="imag hai" src={image1} className="rounded-lg w-32 sm:w-40 md:w-44 object-cover shadow-md" />
+        <img alt="user" src={image2} className="rounded-lg w-32 sm:w-40 md:w-44 object-cover shadow-md" />
+        <img alt="load" src={image3} className="rounded-lg w-32 sm:w-40 md:w-44 object-cover shadow-md" />
+      </div>
+    </div>
+  </section>
+
+  {/* Section 2 */}
+  <section className="mt-20">
+    <div className="text-center max-w-screen-md mx-auto px-4">
+      <Quote />
+    </div>
+  </section>
+
+  {/* Section 3 */}
+  <section className="mt-16">
+    <div className="max-w-screen-xl mx-auto px-4 flex flex-col gap-12">
+      {/* Founding Story */}
+      <div className="flex flex-col md:flex-row gap-8 items-center">
+        <div className="flex-1 text-richblack-200 space-y-4">
+          <h3 className="text-2xl md:text-3xl font-bold text-pink-400">Our Founding Story</h3>
+          <p>
+            In the bustling heart of Silicon Valley, three college friends, each with a unique
+            background in education, technology, and business, found themselves united by a shared
+            frustration: the traditional education system...
+          </p>
+          <p>
+            Today, StudyNotion serves millions of students across the globe, empowering them to
+            learn at their own pace, in their own way...
+          </p>
+        </div>
+        <div className="flex-1">
+          <img alt="foundingstory" src={foundingstroy} className="rounded-lg shadow-lg w-full h-auto object-cover" />
         </div>
       </div>
-      {/* section 2 */}
-      <section>
-         <div className='text-center w-[80%] mx-auto mt-52'>
-            <Quote></Quote>
-         </div>
-      
-      </section>
-      {/* section 3 */}
-      <section>
-        <div className='text-white mt-20'>
-            {/* left bala */}
-            <div className='flex w-[80%] mx-auto gap-10 py-9 justify-between'>
-                <div className='flex w-[50%] flex-col gap-3 text-richblack-500 text-[16px]'>
-                    <h1 className='text-[30px] font-bold text-pink-200'>Our Founding Story</h1>
-                    <p>In the bustling heart of Silicon Valley, three college friends, each with
-                         a unique background in education, technology, and business, found themselves
-                        united by a shared frustration: the traditional education system. Emma, a passionate
-                         high school teacher, constantly saw her students struggling to keep up with a one-size-fits-all
-                         curriculum.  </p>
-                    <p>
-                    Today, StudyNotion serves millions of students across the globe, empowering them to learn
-                     at their own pace, in their own way. What started as a dream over coffee has grown into
-                      a thriving company, driven by the same passion and dedication to transforming education
-                       that brought Emma, Raj, and Sarah.
-                    </p>
-                </div>
-                <div className='w-[50%] flex items-center justify-center'>
-                    <img alt='foundingstory' src={foundingstroy}></img>
-                </div>
-            </div>
-            {/* *second bloack*/}
-            <div className='flex flex-row  w-[80%] mx-auto gap-10 py-16 justify-between'>
-                <div className='flex flex-col gap-2 w-[50%]'>
-                    <h1 className='text-[30px] text-brown-50'> Our vision</h1>
-                     <p className='text-richblack-500 text-lg '>Our vision at StudyNotion is to create a world where education is universally accessible,
-                         personalized, and empowering. We believe in the transformative power of technology to
-                        bridge gaps in traditional education systems, making learning an engaging and individualized
-                        experience. Our goal is to ensure that every learner, regardless of their background or geographical
-                        location, has access to top-tier educational resources and the ability to learn at their own pace.</p>
-                     
-                </div>
-                <div  className='flex flex-col gap-2 w-[50%]'>
-                    <h1 className='text-[30px] text-blue-300'>Our Mission</h1>
-                    <p className='text-richblack-500 text-lg '>Our mission at StudyNotion is to revolutionize education by harnessing the power of technology
-                     to deliver personalized, accessible, and high-quality learning experiences. We are committed 
-                     to breaking down barriers to education and providing students with the tools they need to succeed
-                      in a rapidly evolving world. Through innovative digital solutions, engaging content, and a
-                     supportive community, we aim to inspire and empower learners to reach their full potential.</p>
-                </div>
-            </div>
 
+      {/* Vision & Mission */}
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="bg-richblack-800 rounded-lg shadow p-6 space-y-3">
+          <h3 className="text-2xl font-bold text-yellow-400">Our Vision</h3>
+          <p className="text-richblack-200">
+            Our vision at StudyNotion is to create a world where education is universally accessible,
+            personalized, and empowering...
+          </p>
         </div>
-      </section>
-      {/* section 4 */}
-      <section className='bg-richblack-800 mt-16'>
-        <StatsComponent></StatsComponent>
-      </section>
-      {/* section 5 */}
-      <section className='flex flex-col gap-5 justify-between'>
-        <LearningGrid></LearningGrid>
-        <ContactFormSection></ContactFormSection>
-      </section>
-      <Footer></Footer>
+        <div className="bg-richblack-800 rounded-lg shadow p-6 space-y-3">
+          <h3 className="text-2xl font-bold text-blue-400">Our Mission</h3>
+          <p className="text-richblack-200">
+            Our mission at StudyNotion is to revolutionize education by harnessing the power of
+            technology to deliver personalized, accessible, and high-quality learning experiences...
+          </p>
+        </div>
+      </div>
     </div>
+  </section>
+
+  {/* Section 4 */}
+  <section className="bg-richblack-800 mt-16 py-12">
+    <div className="max-w-screen-xl mx-auto px-4">
+      <StatsComponent />
+    </div>
+  </section>
+
+  {/* Section 5 */}
+  <section className="flex flex-col gap-12 mt-16 max-w-screen-xl mx-auto px-4">
+    <LearningGrid />
+  </section>
+
+  <Footer />
+</div>
+
+
   )
 }
 

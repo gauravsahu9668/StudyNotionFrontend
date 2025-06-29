@@ -19,14 +19,12 @@ ChartJS.register(CategoryScale,LineElement,ArcElement,PointElement, LinearScale,
 const InstructorDashboard = () => {
   const [chartData, setChartData] = useState(null);
   const [lineData,setLineData]=useState(null)
-  const [pieData,setpieDate]=useState(null)
   const chartdata = {
     "Web Development": 5,
     "Machine Learning": 6,
     "DevOps": 4,
     "Python": 7,
   };
-
   useEffect(() => {
     // Prepare data for the chart
     const labels = Object.keys(chartdata); // Categories
@@ -65,19 +63,7 @@ const InstructorDashboard = () => {
         }
       ]
     })
-    setpieDate({
-      labels,
-      datasets: [
-        {
-          label: "Number of Courses",
-          data,
-          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"], // Set pie slice colors
-          hoverBackgroundColor: ["#FF4384", "#3682EB", "#FFAE56", "#4BA0C0"], // Hover colors
-        },
-      ],
-    })
-  }, []);
-
+  },[chartData]);
   return (
     <div className="min-h-screen bg-richblack-900 text-white p-8 flex flex-col items-start">
       <h1 className="text-2xl font-bold mb-6">Instructor Dashboard</h1>

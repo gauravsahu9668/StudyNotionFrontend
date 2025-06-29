@@ -22,18 +22,18 @@ const States=[
 
 const StatsComponent = () => {
   return (
-    <div className='flex text-white w-[80%] justify-around mx-auto'>
-        {
-            States.map((state,index)=>{
-                return(
-                    <div key={index} className='p-10 text-center flex flex-col'>
-                        <h1 className='text-[25px] font-bold'>{state.counts}</h1>
-                        <p className='text-[16px] font-bold text-richblack-500'>{state.lebel}</p>
-                    </div>
-                )
-            })
-        }
+  <div className="flex flex-wrap justify-center gap-6 w-[90%] max-w-screen-xl mx-auto text-white mt-10">
+  {States.map((state, index) => (
+    <div
+      key={index}
+      className="flex flex-col items-center p-6 bg-richblack-800 rounded-lg shadow hover:shadow-lg transition"
+    >
+      <h1 className="text-2xl md:text-3xl font-bold">{state.counts}</h1>
+      <p className="text-sm md:text-base font-medium text-richblack-300">{state.lebel}</p>
     </div>
+  ))}
+</div>
+
   )
 }
 

@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import { Routes,Route } from 'react-router-dom';
 import Home from './Pages/Home';
@@ -25,7 +25,6 @@ import AddCourse from './componets/core/dashboard/AddCourse';
 import Category from './Pages/Category';
 import CourseBuy from './Pages/CourseBuy';
 import CourseView from './componets/core/courseview/CourseView';
-import LectureVideo from './componets/core/courseview/LectureVideo';
 import InstructorLive from './Pages/LiveInstructor/InstructorLive';
 import StudentLive from './Pages/LiveStudent/StudentLive';
 import InstructorDashboard from './Pages/Intructordashboard/InstructorDashboard';

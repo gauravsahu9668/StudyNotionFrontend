@@ -8,63 +8,98 @@ const MyProfile = () => {
       
     },[user])
   return (
-    <div className='w-full flex flex-col gap-5 mt-5'>
-         <h1 className='text-[30px] text-white font-bold'>
-            My Profile
-         </h1>
-         <div className='bg-richblack-800 rounded-md p-4 px-10 flex flex-row justify-between items-center'>
-            <div className='flex items-center gap-3'>
-                <img alt='user' src={user?.image} 
-                className='aspect-square w-[65px] rounded-full object-cover'></img>
-                <div className='flex flex-col'>
-                    <p className='text-[18px] text-white font-bold'>{user?.firstName + " " + user?.lastName}</p>
-                    <p className='text-[16px] text-richblack-500'>{user.email}</p>
-                </div>
-            </div>
-            <CTAButton active={true} linkto={"/dashboard/settings"}>
-                <div className='flex gap-2 text-[14px]'><span>Edit</span>
-                <TbEdit size={'1.2rem'}></TbEdit></div>
-              </CTAButton>
-         </div>
-         <div className='flex flex-col px-10 p-4 bg-richblack-800 rounded-md'>
-             <div className='flex flex-row justify-between'>
-               <p className='text-[18px] text-white font-bold'>About</p>
-               <CTAButton active={true} linkto={"/dashboard/settings"}>
-                <div className='flex gap-2 text-[14px]'><span>Edit</span>
-                <TbEdit size={'1.2rem'}></TbEdit></div>
-              </CTAButton>
-             </div>
-             <p className='text-[16px] text-richblack-500'>{user?.additionaldetails?.about ?? "Write somthing about your self"}</p>
-         </div>
-         {/* section 3 */}
-         <div className='flex flex-col px-10 p-4 gap-3 bg-richblack-800 rounded-md pb-5'>
-             <div className='flex flex-row justify-between items-center'>
-              <p className='text-[18px] text-white font-bold'>Personal Details</p>
-              <CTAButton active={true} linkto={"/dashboard/settings"}>
-                <div className='flex gap-2 text-[14px]'><span>Edit</span>
-                <TbEdit size={'1.2rem'}></TbEdit></div>
-              </CTAButton>
-             </div>
-             <div className='flex flex-row gap-24'>
-                 <div className='flex flex-col gap-3'>
-                    <h1 className='text-[16px] text-richblack-500 font-bold'>First Name</h1>
-                    <p className='text-[16px] text-white '>{user?.firstName}</p>
-                    <h1  className='text-[16px] text-richblack-500 font-bold'>Email</h1>
-                    <p className='text-[16px] text-white '>{user?.email}</p>
-                    <h1  className='text-[16px] text-richblack-500 font-bold'>Gender</h1>
-                    <p className='text-[16px] text-white' >{user?.additionaldetails?.gender ?? "update profile"}</p>
-                 </div>
-                 <div className='flex flex-col gap-3'>
-                    <h1 className='text-[16px] text-richblack-500 font-bold '>Last Name</h1>
-                    <p className='text-[16px] text-white '>{user?.lastName}</p>
-                    <h1  className='text-[16px] text-richblack-500 font-bold'>Phone Number</h1>
-                    <p className='text-[16px] text-white '>{user?.additionaldetails.contactNumber ?? "Update Profile"}</p>
-                    <h1  className='text-[16px] text-richblack-500 font-bold'>Date of Birth</h1>
-                    <p className='text-[16px] text-white ' >{user?.additionaldetails?.dateofbirth ?? "update profile"}</p>
-                 </div>
-             </div>
-         </div>
+    <div className="w-full flex flex-col gap-6 mt-6 px-4 md:px-8 lg:px-16">
+  <h1 className="text-2xl md:text-3xl font-extrabold text-richblack-5">My Profile</h1>
+
+  {/* Profile header */}
+  <div className="bg-richblack-800 rounded-lg p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
+    <div className="flex items-center gap-4">
+      <img
+        alt="user"
+        src={user?.image}
+        className="w-16 h-16 md:w-[65px] md:h-[65px] rounded-full object-cover border border-richblack-700"
+      />
+      <div className="flex flex-col">
+        <p className="text-lg md:text-xl font-semibold text-richblack-5 truncate">
+          {user?.firstName + " " + user?.lastName}
+        </p>
+        <p className="text-sm md:text-base text-richblack-400 truncate">
+          {user?.email}
+        </p>
+      </div>
     </div>
+    <CTAButton active={true} linkto={"/dashboard/settings"}>
+      <div className="flex items-center gap-2 text-sm md:text-base">
+        <span>Edit</span>
+        <TbEdit size="1.2rem" />
+      </div>
+    </CTAButton>
+  </div>
+
+  {/* About section */}
+  <div className="bg-richblack-800 rounded-lg p-4 md:p-6 flex flex-col gap-2 shadow-sm">
+    <div className="flex justify-between items-center">
+      <p className="text-lg font-semibold text-richblack-5">About</p>
+      <CTAButton active={true} linkto={"/dashboard/settings"}>
+        <div className="flex items-center gap-2 text-sm md:text-base">
+          <span>Edit</span>
+          <TbEdit size="1.2rem" />
+        </div>
+      </CTAButton>
+    </div>
+    <p className="text-sm md:text-base text-richblack-400 mt-1">
+      {user?.additionaldetails?.about ?? "Write something about yourself"}
+    </p>
+  </div>
+
+  {/* Personal Details */}
+  <div className="bg-richblack-800 rounded-lg p-4 md:p-6 flex flex-col gap-4 shadow-sm">
+    <div className="flex justify-between items-center">
+      <p className="text-lg font-semibold text-richblack-5">Personal Details</p>
+      <CTAButton active={true} linkto={"/dashboard/settings"}>
+        <div className="flex items-center gap-2 text-sm md:text-base">
+          <span>Edit</span>
+          <TbEdit size="1.2rem" />
+        </div>
+      </CTAButton>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 mt-2">
+      {/* Left column */}
+      <div className="flex flex-col gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-richblack-400">First Name</h2>
+          <p className="text-richblack-5">{user?.firstName}</p>
+        </div>
+        <div>
+          <h2 className="text-sm font-semibold text-richblack-400">Email</h2>
+          <p className="text-richblack-5">{user?.email}</p>
+        </div>
+        <div>
+          <h2 className="text-sm font-semibold text-richblack-400">Gender</h2>
+          <p className="text-richblack-5">{user?.additionaldetails?.gender ?? "Update Profile"}</p>
+        </div>
+      </div>
+
+      {/* Right column */}
+      <div className="flex flex-col gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-richblack-400">Last Name</h2>
+          <p className="text-richblack-5">{user?.lastName}</p>
+        </div>
+        <div>
+          <h2 className="text-sm font-semibold text-richblack-400">Phone Number</h2>
+          <p className="text-richblack-5">{user?.additionaldetails?.contactNumber ?? "Update Profile"}</p>
+        </div>
+        <div>
+          <h2 className="text-sm font-semibold text-richblack-400">Date of Birth</h2>
+          <p className="text-richblack-5">{user?.additionaldetails?.dateofbirth ?? "Update Profile"}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   )
 }
 

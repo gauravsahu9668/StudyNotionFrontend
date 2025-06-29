@@ -28,38 +28,43 @@ const timeline=[
 ]
 const TimeLineSection = () => {
   return (
-       <div className='flex flex-row  items-center px-10 mb-[7rem] mt-5'>
-          <div className='w-[45%] flex flex-col gap-8 ml-[50px]'>
-              {
-                timeline.map((element,index)=>{
-                    return (
-                        <div className='flex gap-3' key={index}>
-                            <div className='w-[50px] h-[50px] bg-white flex items-center justify-center'>
-                                <img src={element.logo}></img>
-                            </div>
-                            <div className='flex flex-col'>
-                                <h2 className='font-semibold text-[18px]'>{element.heading}</h2>
-                                <p className='text-base'>{element.Description}</p>
-                            </div>
-                        </div>
-                    )
-                })
-              }
-          </div>
-          <div className='relative shadow-blue-200 mr-5'>
-            <img src={timelineimage} alt='timeline image' className='w-[80%] rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]'></img>
-            <div className='w-[400px] rounded-md absolute bg-caribbeangreen-700 flex flex-row text-white uppercase p-8 right-[200px] bottom-[-30px]'>
-                <div className='w-[50%] flex flex-row gap-5 items-center border-r border-caribbeangreen-300 '>
-                    <p className='text-3xl font-bold'>10</p>
-                    <p className='text-caribbeangreen-300 text-sm'>Years of Experience</p>
-                </div>
-                <div className='w-[50%] flex items-center px-7 gap-5'>
-                   <p className='text-3xl font-bold'>250</p>
-                   <p className='text-caribbeangreen-300 text-sm'>Type of courses</p>
-                </div>
-            </div>
-          </div>
-       </div>
+       <div className="flex flex-col lg:flex-row items-center justify-between px-4 sm:px-6 md:px-10 gap-8 mb-28 mt-5">
+  {/* Timeline list */}
+  <div className="w-full lg:w-[50%] flex flex-col gap-6">
+    {timeline.map((element, index) => (
+      <div className="flex gap-4 items-start" key={index}>
+        <div className="min-w-[50px] min-h-[50px] bg-white rounded-md flex items-center justify-center shadow-md">
+          <img src={element.logo} alt={`Step ${index}`} className="w-6 h-6 object-contain" />
+        </div>
+        <div className="flex flex-col">
+          <h2 className="font-semibold text-base sm:text-lg md:text-xl text-richblack-50">{element.heading}</h2>
+          <p className="text-xs sm:text-sm md:text-base text-richblack-300">{element.Description}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Timeline image and overlay */}
+  <div className="relative w-full lg:w-[50%] flex justify-center items-center">
+    <img 
+      src={timelineimage} 
+      alt="timeline" 
+      className="w-[90%] sm:w-[80%] rounded-lg shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]" 
+    />
+
+    <div className="absolute bottom-[-20px] right-4 sm:right-10 md:right-20 bg-caribbeangreen-700 text-white rounded-md flex flex-col sm:flex-row w-[90%] sm:w-[380px] md:w-[400px] p-4 sm:p-6 shadow-md">
+      <div className="flex-1 flex items-center gap-3 sm:gap-4 border-b sm:border-b-0 sm:border-r border-caribbeangreen-300 mb-2 sm:mb-0 pr-0 sm:pr-4">
+        <p className="text-xl sm:text-2xl font-bold">10</p>
+        <p className="text-xs sm:text-sm text-caribbeangreen-300">Years of Experience</p>
+      </div>
+      <div className="flex-1 flex items-center gap-3 sm:gap-4 pt-2 sm:pt-0 sm:pl-4">
+        <p className="text-xl sm:text-2xl font-bold">250</p>
+        <p className="text-xs sm:text-sm text-caribbeangreen-300">Type of courses</p>
+      </div>
+    </div>
+  </div>
+</div>
+
   )
 }
 

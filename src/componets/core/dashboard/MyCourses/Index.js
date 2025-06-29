@@ -8,7 +8,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import toast from 'react-hot-toast';
 import { deleteCourse } from '../../../../services/operation/courses';
 import { Link } from 'react-router-dom';
-
+import { formatDate } from '../../../../services/apiconnector';
 const MyCourses = () => {
     const { token } = useSelector((state) => state.auth)
     const [allcourses, setallcourses] = useState([])
@@ -40,79 +40,85 @@ const MyCourses = () => {
     }, [token])
 
     return (
-        <div className='flex flex-col gap-4 '>
-            <div className='flex flex-row justify-between'>
-                <h1 className='mt-5 text-[32px] font-bold text-richblack-50'>My Courses</h1>
-                <Link to='/dashboard/add-course'>
-                    <button className='flex flex-row items-center text-black text-[16px] bg-yellow-50 h-[40px] px-1 rounded-lg mt-5 '>
-                        <MdAdd /><span> Create New</span>
-                    </button>
-                </Link>
+        <div className="flex flex-col gap-6 px-4 md:px-8 lg:px-16 mt-6">
+  {/* Header */}
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <h1 className="text-2xl md:text-3xl font-extrabold text-richblack-5">My Courses</h1>
+    <Link to="/dashboard/add-course">
+      <button className="flex items-center gap-2 bg-yellow-50 text-black px-4 py-2 rounded-lg text-sm md:text-base font-semibold hover:bg-yellow-100 transition">
+        <MdAdd size="1.2rem" /> <span>Create New</span>
+      </button>
+    </Link>
+  </div>
+
+  {/* Content */}
+  {allcourses.length === 0 ? (
+    <div className="text-center text-lg md:text-2xl font-semibold text-richblack-100 py-10">
+      No course added! Click on "Create New"
+    </div>
+  ) : (
+    <div className="flex flex-col gap-4">
+      {/* Table Header */}
+      <div className="hidden md:flex p-3 bg-richblack-800 rounded-md shadow-sm">
+        <p className="w-[50%] text-sm font-semibold uppercase text-richblack-200">Courses</p>
+        <p className="w-[12%] text-sm font-semibold uppercase text-richblack-200">Duration</p>
+        <p className="w-[12%] text-sm font-semibold uppercase text-richblack-200">Price</p>
+        <p className="w-[26%] text-sm font-semibold uppercase text-richblack-200 text-center">Actions</p>
+      </div>
+
+      {/* Course Items */}
+      <div className="flex flex-col gap-4">
+        {allcourses.map((course, index) => (
+          <div key={index} className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-richblack-800 rounded-md p-4 hover:shadow transition">
+            {/* Course Info */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-[50%]">
+              <img src={course?.thumbnail} alt="Thumbnail" className="w-full sm:w-40 h-28 object-cover rounded-lg border border-richblack-700" />
+              <div className="flex flex-col gap-1">
+                <p className="text-base md:text-lg font-semibold text-richblack-5">{course?.courseName}</p>
+                <p className="text-sm text-richblack-400 line-clamp-2">{course?.courseDescription}</p>
+                <p className="text-xs text-richblack-500">Created at: {formatDate(course?.time)}</p>
+                {course?.status === "Published" ? (
+                  <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-green-700 text-green-100 w-fit">
+                    <MdOutlinePublishedWithChanges /> {course?.status}
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-pink-700 text-pink-100 w-fit">
+                    <VscIssueDraft /> {course?.status}
+                  </span>
+                )}
+              </div>
             </div>
-            <div>
-                {
-                    allcourses.length === 0 ? (
-                        <div className='w-full text-center text-[30px] text-richblack-50 font-bold'>No course added! Click on new</div>
-                    ) : (
-                        <div className='flex flex-col pb-2 rounded-lg mb-2'>
-                            <div className='flex p-3 bg-richblack-800 rounded-lg'>
-                                <p className='w-[55%] text-[16px] text-richblack-50 font-bold uppercase'>Courses</p>
-                                <p className='w-[10%] text-[16px] text-richblack-50 font-bold uppercase'>Duration</p>
-                                <p className='w-[10%] pl-2 text-[16px] text-richblack-50 font-bold uppercase'>Price</p>
-                                <p className='w-[25%] pl-3 text-[16px] text-richblack-50 font-bold uppercase'>Action</p>
-                            </div>
-                            <div className='flex flex-col gap-2'>
-                                {
-                                    allcourses.map((course, index) => {
-                                        return (
-                                            <div key={index} className='w-full flex flex-row items-center border-b-[1px] border-richblack-500'>
-                                                <div className='flex p-3 gap-2 w-[55%]'>
-                                                    <img src={course?.thumbnail} width='200px' height='170px' className='rounded-lg' alt="Course thumbnail" />
-                                                    <div className='flex flex-col gap-2'>
-                                                        <p className='text-[18px] text-richblack-5 font-bold'>{course?.courseName}</p>
-                                                        <p className='text-richblack-400 text-[15px] font-semibold w-[85%]'>{course?.courseDescription}</p>
-                                                        <p className='text-richblack-500 text-[14px] font-semibold'>Created at:{" " + course?.time}</p>
-                                                        <p className=''>
-                                                            {
-                                                                course?.status === "Published" ?
-                                                                    (<div className='w-fit flex items-center px-2 py-1 gap-x-2 text-yellow-200 rounded-full bg-richblack-800'>
-                                                                        <MdOutlinePublishedWithChanges /><span>{course?.status}</span>
-                                                                    </div>) :
-                                                                    (<div className='w-fit flex items-center px-2 py-1 gap-x-2 text-pink-700 rounded-full bg-richblack-800'>
-                                                                        <VscIssueDraft /><span>{course?.status}</span>
-                                                                    </div>)
-                                                            }
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className='w-[10%] text-richblack-700 text-[16px] font-bold'>{course?.duration}</div>
-                                                <div className='w-[10%] text-richblack-300 text-[16px] font-bold'>Rs{" " + course?.price}</div>
-                                                <div className='w-[25%] flex flex-row gap-5 text-richblack-300 justify-around'>
-                                                    <button>
-                                                        <MdModeEdit size={'1.5rem'} onClick={() => { toast.error("This feature appears soon") }} />
-                                                    </button>
-                                                    <button>
-                                                        <RiDeleteBin5Line size={"1.5rem"} onClick={() => { deletethecourse(course._id) }} />
-                                                    </button>
-                                                    <Link to={`/go-live-instructor/${course._id}`}>
-                                                    <button
-                                                        className='bg-green-600 text-white px-3 py-2 rounded-md text-[14px] font-semibold hover:bg-green-800'
-                                                        onClick={() => goLiveHandler(course._id)}
-                                                    >
-                                                        Go Live
-                                                    </button>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </div>
-                    )
-                }
+
+            {/* Duration */}
+            <div className="w-full md:w-[12%] text-sm font-medium text-richblack-300">{course?.duration || "N/A"}</div>
+
+            {/* Price */}
+            <div className="w-full md:w-[12%] text-sm font-medium text-yellow-50">₹ {course?.price}</div>
+
+            {/* Actions */}
+            <div className="flex gap-3 justify-start md:justify-center w-full md:w-[26%]">
+              <button onClick={() => toast.error("This feature appears soon")}>
+                <MdModeEdit size="1.4rem" className="text-richblack-300 hover:text-yellow-50 transition" />
+              </button>
+              <button onClick={() => deletethecourse(course._id)}>
+                <RiDeleteBin5Line size="1.4rem" className="text-richblack-300 hover:text-red-500 transition" />
+              </button>
+              <Link to={`/go-live-instructor/${course._id}`}>
+                <button
+                  onClick={() => goLiveHandler(course._id)}
+                  className="bg-green-600 text-white text-xs md:text-sm px-3 py-1 rounded-md font-semibold hover:bg-green-800 transition"
+                >
+                  Go Live
+                </button>
+              </Link>
             </div>
-        </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+
     )
 }
 

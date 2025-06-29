@@ -1,110 +1,101 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const StudentChat = () => {
-  const [currentMessage, setcurrentMessage] = useState("");
-  const [messages, setmessage] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
-  const {user}=useSelector((state)=>state.profile)
-  useEffect(() => {
-    // Initialize the WebSocket connection
-    const ws = new WebSocket("ws://localhost:8000");
+  const { user } = useSelector((state) => state.profile);
 
-    // Save the socket reference in state
+  const messagesEndRef = useRef(null); // Ref to scroll to bottom
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8000");
     setSocket(ws);
 
     ws.onopen = () => {
-      console.log("WebSocket connection established");
+      console.log("WebSocket connected");
       ws.send(JSON.stringify({ type: "chatserver" }));
     };
 
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        setmessage((prev) => [...prev, message]);
+        setMessages((prev) => [...prev, message]);
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
       }
     };
 
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+    ws.onerror = (error) => console.error("WebSocket error:", error);
 
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
+    ws.onclose = () => console.log("WebSocket disconnected");
 
-    // Cleanup on unmount
     return () => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.close();
-      }
+      ws.close();
     };
   }, []);
 
-  const handleSendMessage = () => {
-    if (!currentMessage.trim()) {
-      return;
+  useEffect(() => {
+    // Scroll to latest message when messages update
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(
-        JSON.stringify({ type: "chatmessage", message: currentMessage, user: user })
-      );
+  }, [messages]);
+
+  const handleSendMessage = () => {
+    if (!currentMessage.trim()) return;
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: "chatmessage", message: currentMessage, user }));
+      setCurrentMessage("");
     } else {
       console.error("WebSocket is not open");
     }
   };
 
   return (
-<div className="w-full relative h-full mt-4  rounded-lg bg-richblack-800 text-white ">
-  {/* Header */}
-  <div className="py-2 absolute top-0 left-0 w-full flex items-center gap-x-3 px-4 bg-richblack-700 font-bold rounded-lg text-lg">
-    <div className="w-[10px] h-[10px] rounded-full bg-[#f93838]"></div>
-    Live Chat
-  </div>
-
-  {/* Chat Messages */}
-  <div
-    className="flex-1 w-full h-full mb-16 mt-10 overflow-y-auto p-4 space-y-2 scrollbar"
-    style={{ maxHeight: "550px" }} // Ensures fixed height for the chat messages
-    ref={(ref) => {
-      if (ref) ref.scrollTop = ref.scrollHeight; // Auto-scroll to bottom for new messages
-    }}
-  >
-     {messages.map((msg, index) => (
-      <div key={index} className="flex flex-row items-center gap-x-2">
-        <img src={msg?.user?.image} className='w-[30px] h-[30px] rounded-full'></img>
-        <div className="max-w-[70%] flex flex-col items-start p-2 rounded-lg bg-richblack-600">
-          <p className='text-[14px] text-[#78da71]'>{msg?.user?.firstName}</p>
-          <p className="text-sm font-bold">{msg?.message}</p>
-        </div>
+    <div className="relative flex flex-col h-[400px] sm:h-[500px] rounded-lg bg-richblack-800 shadow-inner overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 py-2 bg-richblack-700 border-b border-richblack-600 text-yellow-400 font-semibold text-sm sm:text-base">
+        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+        Live Class Chat
       </div>
-    ))}
-  </div>
 
-  {/* Chat Input */}
-  <div className="p-4 absolute bottom-0 left-0 w-full rounded-lg bg-richblack-700 flex items-center">
-    <input
-      type="text"
-      placeholder="Type your message..."
-      className="flex-1 bg-richblack-800 text-white p-2 rounded-lg border border-richblack-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-      value={currentMessage}
-      onChange={(e) => setcurrentMessage(e.target.value)}
-    />
-    <button
-      className="ml-3 bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition"
-      onClick={handleSendMessage}
-    >
-      Send
-    </button>
-  </div>
-</div>
+      {/* Messages */}
+      <div
+        ref={messagesEndRef}
+        className="flex-1 px-4 py-2 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-richblack-700"
+      >
+        {messages.map((msg, index) => (
+          <div key={index} className="flex gap-2 items-start">
+            <img src={msg?.user?.image} alt="" className="w-8 h-8 rounded-full object-cover" />
+            <div className="max-w-[80%] bg-richblack-700 rounded-md px-3 py-2">
+              <p className="text-xs text-yellow-400 font-semibold">{msg?.user?.firstName}</p>
+              <p className="text-sm text-richblack-50 break-words">{msg?.message}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
-
+      {/* Input */}
+      <div className="flex items-center gap-2 p-3 bg-richblack-700 border-t border-richblack-600">
+        <input
+          type="text"
+          placeholder="Type your message..."
+          className="flex-1 bg-richblack-800 text-richblack-100 text-sm px-3 py-2 rounded-md border border-richblack-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+          value={currentMessage}
+          onChange={(e) => setCurrentMessage(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+        />
+        <button
+          onClick={handleSendMessage}
+          className="bg-yellow-500 text-black px-3 py-2 rounded-md text-sm hover:bg-yellow-600 transition"
+        >
+          Send
+        </button>
+      </div>
+    </div>
   );
 };
 
 export default StudentChat;
-
-
