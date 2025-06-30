@@ -26,7 +26,6 @@ const InstructorDashboard = () => {
     "Python": 7,
   };
   useEffect(() => {
-    // Prepare data for the chart
     const labels = Object.keys(chartdata); // Categories
     const data = Object.values(chartdata); // Values (Number of courses)
 
@@ -63,7 +62,7 @@ const InstructorDashboard = () => {
         }
       ]
     })
-  },[chartData]);
+  },[chartdata]);
   return (
     <div className="min-h-screen bg-richblack-900 text-white p-8 flex flex-col items-start">
       <h1 className="text-2xl font-bold mb-6">Instructor Dashboard</h1>

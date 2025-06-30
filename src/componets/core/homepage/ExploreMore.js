@@ -2,13 +2,6 @@ import React, { useState } from 'react'
 import coursesdata from '../../../Data/homepage-explore'
 import HighlighText from './HighlighText';
 import CourseCard from './CourseCard';
-const tabnames=[
-    "Free",
-    "New to coding",
-    "Most popular",
-    "Skills paths",
-    "Career paths"
-]
 const ExploreMore = () => {
     const [currenttab,setcurrenttab]=useState("Free");
     const data=coursesdata

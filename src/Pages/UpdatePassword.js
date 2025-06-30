@@ -9,7 +9,6 @@ const UpdatePassword = () => {
     const location=useLocation()
     const dispatch=useDispatch()
     const [formdata,setformdata]=useState({password:"",confirmpassword:""})
-    const loading=useSelector((state)=>state.auth)
     const {password,confirmpassword}=formdata
     const changeHandler=(e)=>{
         const{ name,value}=e.target

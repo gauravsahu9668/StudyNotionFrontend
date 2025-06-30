@@ -1,6 +1,5 @@
 import { setLoading, setToken } from "../../slices/authSlice"
 import { setTotalItems } from "../../slices/cartSlice";
-import { setCourse, setStep } from "../../slices/courseSlice";
 import { setUser } from "../../slices/profileSlice";
 import { apiconnector } from "../apiconnector";
 import {categories} from '../apis'

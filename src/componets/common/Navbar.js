@@ -18,8 +18,6 @@ const Navbar = () => {
 
 
   const [sublink,setlink]=useState([]);
-   const [dropdown, setDropdown] = useState(false);
-    const handleLinkClick = () => setDropdown(false);
   const fetchsublinks = async()=>{
       try{
        const  result=await apiconnector("GET",categories.CATEGORIES_API)
@@ -32,7 +30,7 @@ const Navbar = () => {
   useEffect(()=>{
      fetchsublinks()
      console.log(sublink)
-  },[])
+  },[sublink])
 
 
 
@@ -50,7 +48,7 @@ const Navbar = () => {
     <div className='flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700'>
       <div className='w-11/12 flex  max-w-maxContent items-center justify-between'>
          <Link to='/'>
-         <img src={logo} width={160} height={130}></img>
+         <img src={logo} width={160} alt="loading.." height={130}></img>
          </Link>
          <nav>
             <ul className='flex gap-x-6 text-richblack-25'>
@@ -99,7 +97,7 @@ const Navbar = () => {
          {/* Login/Signup/dashboard*/}
          <div className='flex gap-x-5 items-center '>
              {
-                user && user?.accountType !="Instructor" && (
+                user && user?.accountType !=="Instructor" && (
                   <Link to='/dashboard/cart' className='relative text-richblack-25'>
                     <AiOutlineShoppingCart size={'2rem'} ></AiOutlineShoppingCart>
                     {

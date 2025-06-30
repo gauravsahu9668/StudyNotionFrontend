@@ -1,5 +1,4 @@
 
-const BASE_URL=process.env.REACT_APP_BASE_URL
 const SEARVER_BASE_URL='http://localhost:8000/api/v1'
 export const categories ={
     CATEGORIES_API: SEARVER_BASE_URL + "/course/showallCategory",

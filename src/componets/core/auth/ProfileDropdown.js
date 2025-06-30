@@ -17,7 +17,7 @@ const ProfileDropdown = () => {
   return (
     <div className='text-white flex items-center relative group'>
       <div className='w-[35px] h-[35px] '>
-        <img src={user.image} className='w-full h-full rounded-full'></img>
+        <img src={user.image} alt="loading.." className='w-full h-full rounded-full'></img>
       </div>
       <div className='cursor-pointer'><RiArrowDropDownLine size={'2rem'} color='white' onClick={()=>{setlogdis(!logdis)}}></RiArrowDropDownLine></div>
       <div className={`flex flex-col text-[16px] justify-center bg-richblack-25 rounded-lg text-richblack-800 absolute w-[120px] p-1 gap-1  -right-10 top-10 invisible group-hover:visible transition-all duration-200`}>

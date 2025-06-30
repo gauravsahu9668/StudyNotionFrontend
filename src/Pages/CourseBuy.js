@@ -9,7 +9,6 @@ import { addedtocart } from '../services/operation/courses';
 import toast from 'react-hot-toast';
 import { setTotalItems } from '../slices/cartSlice';
 import { buyCourse } from '../services/operation/courses';
-import Footer from '../componets/common/Footer/Footer';
 import { categories } from '../services/apis';
 import { CiVideoOn } from "react-icons/ci";
 import { apiconnector,formatDate } from '../services/apiconnector';
@@ -87,7 +86,7 @@ const CourseBuy = () => {
     }
     useEffect(()=>{
         getcourseDetails()
-    },[])
+    },[token])
   return (
     
        <div className="w-full mt-14 text-richblack-50">

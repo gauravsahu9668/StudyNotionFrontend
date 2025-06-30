@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import LogerType from './LogerType'
 import { useNavigate } from 'react-router-dom'
 import { sendotp } from '../../../services/operation/authAPI'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch} from 'react-redux'
 import { setsignupData } from '../../../slices/authSlice'
 const  SignupForm = ({accountType,setAccountType}) => {
     const [formdata,setsignupdata]=useState({firstName:"",lastName:"",email:"",password:"",confirmpassword:"",accountType:accountType})
     const signuphandler=(event)=>{
-        const {name,type,value}=event.target
+        const {name,value}=event.target
         setsignupdata(prevformdata=>{
            return {
             ...prevformdata,

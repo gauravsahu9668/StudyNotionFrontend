@@ -19,7 +19,7 @@ const CourseInformation = () => {
     }=useForm()
     const {token}=useSelector((state)=>state.auth)
     const dispatch=useDispatch()
-    const {course,editCourse,step}=useSelector((state)=>state.course)
+    const {course,editCourse}=useSelector((state)=>state.course)
 
     const [courseCategories,setcourseCategories]=useState([])
     const getcategories=async()=>{

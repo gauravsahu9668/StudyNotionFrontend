@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 const ConatctUsForm = () => {
-
-  const [loading,setloading]=useState(false)
   const {
     register,
     handleSubmit,

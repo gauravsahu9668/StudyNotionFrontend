@@ -43,7 +43,7 @@ export async function createsesction(sectionName,courseId,token){
 export async function updatedsection(sectionName,sectionId,token){
     const {UPDATE_SECTION_API}=categories
     try{
-        const result=await apiconnector("PUT",UPDATE_SECTION_API,{sectionName,sectionId,token},{
+        await apiconnector("PUT",UPDATE_SECTION_API,{sectionName,sectionId,token},{
             'Authorization':`Bearer ${token}`
         })
     }catch(error){

@@ -7,7 +7,6 @@ import banner from '../Assets/Images/banner.mp4'
 import CodeBlocks from '../componets/core/homepage/CodeBlock'
 import TimeLineSection from '../componets/core/homepage/timelinesection'
 import LearningLanguageSection from '../componets/core/homepage/learnlangugesection'
-import ExploreMore from '../componets/core/homepage/ExploreMore'
 import Footer from '../componets/common/Footer/Footer'
 import ReviewSlider from '../componets/common/ReviewSlider'
 const Home = () => {

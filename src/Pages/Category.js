@@ -37,7 +37,7 @@ const Category = () => {
 
   useEffect(() => {
     getCategoryCourses();
-  },[]);
+  },[token]);
 
   return (
     <div className="mt-14 w-full text-richblack-50">

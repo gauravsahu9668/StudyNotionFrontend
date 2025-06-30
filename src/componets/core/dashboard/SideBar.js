@@ -1,4 +1,4 @@
-import  { useState } from 'react'
+
 import {sidebarLinks} from '../../../Data/dashboard-links'
 import { logout } from '../../../services/operation/authAPI'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,11 +7,6 @@ import { useNavigate } from 'react-router-dom'
 const SideBar = () => {
 
   const {user}=useSelector((state)=>state.profile)
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
-  const okHandler=()=>{
-    dispatch(logout(navigate))
-  }
   return (
 <div className="flex flex-col w-full max-h-screen overflow-y-auto">
   <div className="flex flex-col border-r border-richblack-700 pt-4 bg-richblack-800">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
 import OTPInput from 'react-otp-input'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,9 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { sendotp } from '../services/operation/authAPI'
 import { signUP } from '../services/operation/authAPI'
 const VerifyOTP = () => {
-  const [load,setload]=useState(false)
   const [otp,setotp]=useState('')
-
   const dispatch=useDispatch()
   const {signupdata}=useSelector((state)=>state.auth)
   const navigate=useNavigate()
@@ -16,7 +14,7 @@ const VerifyOTP = () => {
     if(!signupdata){
       navigate("/signup")
     }
-  },[])
+  },[navigate,signupdata])
   const submitHandler=(e)=>{
     e.preventDefault();
     const {firstName,lastName,email,password,confirmpassword,accountType}=signupdata

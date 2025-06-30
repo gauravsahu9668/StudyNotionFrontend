@@ -1,4 +1,4 @@
-import React from 'react'
+
 import image1 from '../Assets/Images/aboutus1.webp'
 import image2 from '../Assets/Images/aboutus2.webp'
 import image3 from '../Assets/Images/aboutus3.webp'
@@ -6,7 +6,7 @@ import Quote from '../componets/core/aboutpage/Quote'
 import foundingstroy from '../Assets/Images/FoundingStory.png'
 import StatsComponent from '../componets/core/aboutpage/StatsComponent'
 import LearningGrid from '../componets/core/aboutpage/LearningGrid'
-import ContactFormSection from '../componets/core/aboutpage/ContactFormSection'
+
 import Footer from '../componets/common/Footer/Footer'
 const About = () => {
   return (

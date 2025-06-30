@@ -17,8 +17,8 @@ const Login = () => {
         </div>
         <div className='flex flex-row items-center mx-auto imagebox p-2'>
             <div className=' flex relative w-[100%]'>
-            <img src={loginimage} className='z-10 rounded-lg'></img>
-            <img src={frame} className='absolute left-5 top-5 z-0 rounded-lg'></img>
+            <img src={loginimage} alt="loading.." className='z-10 rounded-lg'></img>
+            <img src={frame} alt="loading..." className='absolute left-5 top-5 z-0 rounded-lg'></img>
             </div>
         </div>
     </div>
