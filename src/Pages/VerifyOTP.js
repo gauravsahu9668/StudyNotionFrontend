@@ -26,10 +26,6 @@ const VerifyOTP = () => {
   }
   return (
     <div className='text-white w-[80%] mx-auto flex items-center justify-center p-[150px]'>
-       {
-        load? (
-          <div>Loading....</div>
-        ):(
           <div className='p-4 w-[420px] flex flex-col gap-3'>
             <h1 className='text-white text-[25px] font-bold'>Verify email</h1>
             <p className='text-[16px] text-richblack-400 font-bold'>A verification code has been sent to you. Enter the code below</p>
@@ -71,8 +67,6 @@ const VerifyOTP = () => {
               >Resend otp</button>
             </div>
           </div>
-        )
-       }
     </div>
   )
 }
