@@ -11,7 +11,7 @@ import { setTotalItems } from '../slices/cartSlice';
 import { buyCourse } from '../services/operation/courses';
 import Footer from '../componets/common/Footer/Footer';
 import { categories } from '../services/apis';
-
+import { CiVideoOn } from "react-icons/ci";
 import { apiconnector,formatDate } from '../services/apiconnector';
 const CourseBuy = () => {
     const location=useLocation()
@@ -93,8 +93,7 @@ const CourseBuy = () => {
        <div className="w-full mt-14 text-richblack-50">
   {Course.map((item, index) => (
     item._id === courseId && (
-      <div key={index}>
-        {/* Header section */}
+      <div key={index} className='mb-6'>
         <div className="bg-gradient-to-r from-richblack-700 via-richblack-800 to-richblack-900 py-10">
           <div className="w-[90%] md:w-[80%] mx-auto flex flex-col lg:flex-row gap-6">
             {/* Left: Course details */}
@@ -120,6 +119,9 @@ const CourseBuy = () => {
               </p>
               {/* Author */}
               <div className="mt-3 flex items-center gap-3">
+                <div className="text-[14px] md:text-[15px] text-richblack-200">{item.courseDescription}</div>
+              </div>
+              <div className="mt-3 flex items-center gap-3">
                 <img src={item?.instructor?.image} alt="Instructor" className="w-[50px] h-[50px] rounded-full object-cover" />
                 <div className="text-[16px] md:text-[18px] text-richblack-200">{item?.instructor?.firstName} {item?.instructor?.lastName}</div>
               </div>
@@ -143,34 +145,57 @@ const CourseBuy = () => {
           {/* What you'll learn */}
           <div className="bg-richblack-800 p-5 rounded-xl shadow-md">
             <h2 className="text-[22px] font-bold mb-2">What you'll learn</h2>
-            <p className="text-richblack-300 text-[15px] md:text-[17px]">{item.courseDescription}</p>
+            <p className="text-richblack-300 text-[15px] md:text-[17px]">{item.whatyouwilllearn}</p>
+           <div className="mt-4">
+  <h1 className="text-[#DC2626] text-lg font-semibold">Instructions</h1>
+  <div className="mt-4 flex flex-col gap-2">
+    {item.instructions.split(',').map((text, index) => (
+      <p key={index} className="text-[#66BB6A] text-sm leading-relaxed">
+        {text.trim()}
+      </p>
+    ))}
+  </div>
+</div>
+
           </div>
 
           {/* Course content */}
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
               <h2 className="text-[20px] md:text-[23px] font-bold">Course Content</h2>
-              <button className="text-yellow-400 text-[14px] hover:underline">Collapse all sections</button>
             </div>
             <p className="text-[14px] md:text-[15px] text-richblack-300">{item.coursecontent.length} sections · 2 hrs 30 min</p>
 
             {/* Sections */}
-            <div className="flex flex-col gap-2">
-              {item.coursecontent.map((section, idx) => (
-                <div key={idx} className="flex justify-between items-center bg-richblack-800 rounded-lg px-4 py-2 hover:bg-richblack-700 transition">
-                  <span className="text-[15px] md:text-[16px]">{section.sectionName}</span>
-                  {/* Optional: add icon */}
-                </div>
-              ))}
-            </div>
+            <div className="flex flex-col border-[1px] border-[#161616] ">
+  {item.coursecontent.map((section, idx) => (
+    <div
+      key={idx}
+      className="flex flex-col group justify-between items-start bg-richblack-800  hover:bg-richblack-700 transition"
+    >
+      <div className="text-[14px] md:text-[16px] p-3 text-left w-full">
+        {section.sectionName}
+      </div>
+      <div className="w-full mt-2 space-y-1 bg-richblack-900">
+        {section.subsection.map((sub, index) => (
+          <div
+            key={index}
+            className="pl-5 py-2   text-left text-[12px] md:text-[14px] hidden group-hover:block transition"
+          >
+          <div className='flex items-center gap-x-3'><CiVideoOn color='yellow'></CiVideoOn>
+            <span>{sub.title}</span></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+             </div>
+
           </div>
         </div>
       </div>
     )
   ))}
-  <div className="mt-10">
-    <Footer />
-  </div>
 </div>
 
   )

@@ -64,11 +64,12 @@ const CourseInformation = () => {
           const {courseTitle,courseShortDesc,courseBenefits,coursePrice,courseThumbnail,courseCategory,
             courseTags,courseRequirementFeild
           }=data
+          console.log(courseBenefits)
           const formdata=new FormData()
 
           formdata.append("courseName",courseTitle)
           formdata.append("courseDescription",courseShortDesc)
-          formdata.append("whatyouwilllearn:",courseBenefits)
+          formdata.append("whatyouwilllearn",courseBenefits)
           formdata.append("price",coursePrice)
           formdata.append("thumbnailimage",courseThumbnail[0])
           formdata.append("category",courseCategory)
